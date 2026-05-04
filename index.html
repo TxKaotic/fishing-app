@@ -4,19 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Treasure Coast Fishing | Offshore Report</title>
+
   <style>
     :root {
       --bg: #07161d;
-      --bg-soft: #0c2430;
-      --card: rgba(255, 255, 255, 0.09);
-      --card-strong: rgba(255, 255, 255, 0.14);
       --text: #f4fbff;
       --muted: rgba(244, 251, 255, 0.72);
       --muted-2: rgba(244, 251, 255, 0.52);
       --accent: #34d5c3;
       --accent-2: #4aa8ff;
       --warning: #ffd166;
-      --danger: #ff6b6b;
       --line: rgba(255, 255, 255, 0.14);
       --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
       --radius: 28px;
@@ -169,6 +166,14 @@
       font-size: 1.25rem;
     }
 
+    .mobile-menu {
+      display: none;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
     .hero {
       padding: 72px 0 34px;
     }
@@ -306,30 +311,40 @@
       transform: translateY(-3px);
     }
 
-    .quick-stats {
+    .quick-stats,
+    .forecast-box {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
+      margin-top: 20px;
+    }
+
+    .quick-stats {
+      grid-template-columns: repeat(3, 1fr);
       margin-top: 32px;
     }
 
-    .stat {
+    .stat,
+    .forecast-day {
       padding: 17px;
       border-radius: 21px;
       background: rgba(0, 0, 0, 0.24);
       border: 1px solid rgba(255, 255, 255, 0.13);
     }
 
-    .stat strong {
+    .stat strong,
+    .forecast-day strong {
       display: block;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
     }
 
-    .stat span {
+    .stat span,
+    .forecast-day span {
       display: block;
-      margin-top: 4px;
-      color: var(--muted-2);
-      font-size: 0.82rem;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.35;
     }
 
     .side-stack {
@@ -389,10 +404,6 @@
       border: 1px solid rgba(255, 209, 102, 0.24);
       font-size: 0.9rem;
       line-height: 1.5;
-    }
-
-    .section {
-      padding: 42px 0;
     }
 
     .section-heading {
@@ -511,68 +522,6 @@
       color: #06212a;
     }
 
-    .tools-grid {
-      display: grid;
-      grid-template-columns: 0.85fr 1.15fr;
-      gap: 18px;
-    }
-
-    .checklist {
-      display: grid;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .check-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 13px;
-      border-radius: 17px;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .check-row input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--accent);
-    }
-
-    .check-row.done span {
-      color: var(--muted-2);
-      text-decoration: line-through;
-    }
-
-    .forecast-box {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .forecast-day {
-      padding: 18px 14px;
-      border-radius: 20px;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .forecast-day strong {
-      display: block;
-      font-size: 1.05rem;
-    }
-
-    .forecast-day span {
-      display: block;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
     .safety-card {
       border-radius: var(--radius);
       padding: clamp(24px, 4vw, 38px);
@@ -611,28 +560,8 @@
       text-align: center;
     }
 
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 22px;
-      transform: translate(-50%, 120px);
-      padding: 13px 17px;
-      border-radius: 999px;
-      background: rgba(4, 18, 24, 0.9);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      color: var(--text);
-      z-index: 30;
-      transition: transform 240ms ease;
-    }
-
-    .toast.show {
-      transform: translate(-50%, 0);
-    }
-
     @media (max-width: 920px) {
-      .hero-grid,
-      .tools-grid {
+      .hero-grid {
         grid-template-columns: 1fr;
       }
 
@@ -663,14 +592,10 @@
         display: grid;
       }
 
-      .mobile-menu {
-        display: none;
-        padding-bottom: 16px;
-      }
-
       .mobile-menu.open {
         display: grid;
         gap: 10px;
+        padding-bottom: 16px;
       }
 
       .mobile-menu a {
@@ -694,6 +619,7 @@
     }
   </style>
 </head>
+
 <body>
   <header class="topbar">
     <div class="shell">
@@ -707,14 +633,16 @@
         </a>
 
         <div class="nav-actions">
+          <a class="pill-button" href="#snapshot">Live Snapshot</a>
           <a class="pill-button" href="#resources">Resources</a>
           <a class="pill-button" href="https://forecast.weather.gov/shmrn.php?mz=amz555" target="_blank" rel="noopener">NOAA Report ↗</a>
-          <button class="icon-button" id="menuToggle" aria-label="Open menu">☰</button>
+          <button class="icon-button" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
         </div>
       </nav>
+
       <div class="mobile-menu" id="mobileMenu">
+        <a href="#snapshot">Live Snapshot</a>
         <a href="#resources">Resources</a>
-        <a href="#trip-tools">Trip Tools</a>
         <a href="https://forecast.weather.gov/shmrn.php?mz=amz555" target="_blank" rel="noopener">NOAA Report ↗</a>
       </div>
     </div>
@@ -732,8 +660,8 @@
               local weather, and swell resources before heading out.
             </p>
             <div class="hero-actions">
-              <a class="cta primary" href="#resources">View fishing resources →</a>
-              <a class="cta secondary" href="https://video-monitoring.com/beachcams/jupiter/" target="_blank" rel="noopener">Open Jupiter Cam</a>
+              <a class="cta primary" href="#snapshot">View live snapshot →</a>
+              <a class="cta secondary" href="https://visitstlucie.com/fort-pierce-inlet-webcam-and-jetty/" target="_blank" rel="noopener">Open Fort Pierce Cam</a>
             </div>
           </div>
 
@@ -747,8 +675,8 @@
               <span>Marine forecast</span>
             </div>
             <div class="stat">
-              <strong>Local</strong>
-              <span>Weather links</span>
+              <strong>Live</strong>
+              <span>Wind + tide snapshot</span>
             </div>
           </div>
         </div>
@@ -779,6 +707,26 @@
       </div>
     </section>
 
+    <section class="section" id="snapshot">
+      <div class="shell">
+        <div class="panel">
+          <h2>Conditions Snapshot - LIVE</h2>
+          <p>Real-time conditions for Fort Pierce to help you make a quick go/no-go call.</p>
+
+          <div class="forecast-box">
+            <div class="forecast-day"><strong>Wind</strong><span id="liveWind">Loading...</span></div>
+            <div class="forecast-day"><strong>Seas</strong><span id="liveSeas">Loading...</span></div>
+            <div class="forecast-day"><strong>Tide</strong><span id="liveTide">Loading...</span></div>
+            <div class="forecast-day"><strong>Storms</strong><span id="liveStorms">Loading...</span></div>
+          </div>
+
+          <div class="mini-note">
+            Live data powered by NOAA, NWS, and Open-Meteo marine forecasts. Always verify before heading offshore.
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="resources">
       <div class="shell">
         <div class="section-heading">
@@ -787,10 +735,10 @@
             <p>Filter by resource type and open the links you need fast.</p>
           </div>
           <div class="filters" aria-label="Resource filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="cams">Cams</button>
-            <button class="filter-btn" data-filter="forecast">Forecast</button>
-            <button class="filter-btn" data-filter="weather">Weather</button>
+            <button class="filter-btn active" type="button" data-filter="all">All</button>
+            <button class="filter-btn" type="button" data-filter="cams">Cams</button>
+            <button class="filter-btn" type="button" data-filter="forecast">Forecast</button>
+            <button class="filter-btn" type="button" data-filter="weather">Weather</button>
           </div>
         </div>
 
@@ -870,36 +818,6 @@
       </div>
     </section>
 
-    <section class="section" id="trip-tools">
-      <div class="shell tools-grid">
-        <div class="panel">
-          <h2>Trip checklist</h2>
-          <p>Tap each item as you review your plan. This checklist saves on this device.</p>
-          <div class="checklist" id="checklist">
-            <label class="check-row"><input type="checkbox" data-key="noaa"> <span>Checked NOAA marine forecast</span></label>
-            <label class="check-row"><input type="checkbox" data-key="cams"> <span>Reviewed inlet cams</span></label>
-            <label class="check-row"><input type="checkbox" data-key="weather"> <span>Checked storms and local weather</span></label>
-            <label class="check-row"><input type="checkbox" data-key="floatplan"> <span>Told someone your float plan</span></label>
-            <label class="check-row"><input type="checkbox" data-key="safety"> <span>Confirmed safety gear and fuel</span></label>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Simple condition mindset</h2>
-          <p>Use this as a placeholder section for future live data, favorite spots, tide links, or a fishing report.</p>
-          <div class="forecast-box">
-            <div class="forecast-day"><strong>Wind</strong><span>Direction + speed</span></div>
-            <div class="forecast-day"><strong>Seas</strong><span>Height + period</span></div>
-            <div class="forecast-day"><strong>Tide</strong><span>Inlet timing</span></div>
-            <div class="forecast-day"><strong>Storms</strong><span>Radar check</span></div>
-          </div>
-          <div class="mini-note">
-            Want to expand this later? Add tide charts, moon phase, reef numbers, target species, or an actual daily offshore report feed.
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="section">
       <div class="shell">
         <div class="safety-card">
@@ -916,94 +834,210 @@
 
   <footer>
     <div class="shell">
-      Treasure Coast Fishing / Offshore Report
+      Treasure Coast Fishing / Offshore Report · Built by Stephen Daniels
     </div>
   </footer>
 
-  <div class="toast" id="toast" role="status" aria-live="polite">Checklist saved</div>
-
   <script>
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const resourceCards = document.querySelectorAll('.resource-card');
-    const tipBox = document.getElementById('tipBox');
-    const conditionItems = document.querySelectorAll('.condition-item');
-    const checklist = document.getElementById('checklist');
-    const toast = document.getElementById('toast');
+    const FORT_PIERCE_LAT = 27.4706;
+    const FORT_PIERCE_LON = -80.2960;
 
-    const storageKey = 'treasureCoastFishingChecklist';
-    let toastTimer;
+    // Approx. 20 statute miles east/offshore of Fort Pierce Inlet.
+    // Adjust this point if you want to target a specific reef, ledge, or fishing spot.
+    const OFFSHORE_20MI_LAT = 27.4706;
+    const OFFSHORE_20MI_LON = -79.9700;
 
-    menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('open');
-      menuToggle.textContent = mobileMenu.classList.contains('open') ? '×' : '☰';
-    });
+    const TIDE_STATION = "8722212";
 
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        menuToggle.textContent = '☰';
-      });
-    });
+    const menuToggle = document.getElementById("menuToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const resourceCards = document.querySelectorAll(".resource-card");
+    const tipBox = document.getElementById("tipBox");
+    const conditionItems = document.querySelectorAll(".condition-item");
 
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const filter = button.dataset.filter;
+    const liveEls = {
+      wind: document.getElementById("liveWind"),
+      seas: document.getElementById("liveSeas"),
+      tide: document.getElementById("liveTide"),
+      storms: document.getElementById("liveStorms")
+    };
 
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        resourceCards.forEach(card => {
-          const shouldShow = filter === 'all' || card.dataset.category === filter;
-          card.style.display = shouldShow ? 'flex' : 'none';
-        });
-      });
-    });
-
-    conditionItems.forEach(item => {
-      item.addEventListener('click', () => {
-        tipBox.textContent = item.dataset.note;
-        conditionItems.forEach(row => row.style.borderColor = 'rgba(255,255,255,0.1)');
-        item.style.borderColor = 'rgba(52, 213, 195, 0.65)';
-      });
-    });
-
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
+    function setText(element, value) {
+      if (element) element.textContent = value;
     }
 
-    function getSavedChecklist() {
+    function formatTime(dateString) {
+      return new Date(dateString).toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
+      });
+    }
+
+    function getTodayYYYYMMDD() {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      return `${yyyy}${mm}${dd}`;
+    }
+
+    function setupMobileMenu() {
+      if (!menuToggle || !mobileMenu) return;
+
+      menuToggle.addEventListener("click", () => {
+        const isOpen = mobileMenu.classList.toggle("open");
+        menuToggle.textContent = isOpen ? "×" : "☰";
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      mobileMenu.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.remove("open");
+          menuToggle.textContent = "☰";
+          menuToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
+
+    function setupResourceFilters() {
+      filterButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          const filter = button.dataset.filter;
+
+          filterButtons.forEach(btn => btn.classList.remove("active"));
+          button.classList.add("active");
+
+          resourceCards.forEach(card => {
+            const shouldShow = filter === "all" || card.dataset.category === filter;
+            card.style.display = shouldShow ? "flex" : "none";
+          });
+        });
+      });
+    }
+
+    function setupConditionTips() {
+      if (!tipBox) return;
+
+      conditionItems.forEach(item => {
+        item.addEventListener("click", () => {
+          tipBox.textContent = item.dataset.note;
+          conditionItems.forEach(row => row.style.borderColor = "rgba(255,255,255,0.1)");
+          item.style.borderColor = "rgba(52, 213, 195, 0.65)";
+        });
+      });
+    }
+
+    async function fetchNwsSnapshot() {
+      const pointUrl = `https://api.weather.gov/points/${FORT_PIERCE_LAT},${FORT_PIERCE_LON}`;
+      const pointRes = await fetch(pointUrl, { headers: { "Accept": "application/geo+json" } });
+
+      if (!pointRes.ok) throw new Error("Unable to load NWS point data");
+
+      const pointData = await pointRes.json();
+      const forecastRes = await fetch(pointData.properties.forecastHourly);
+
+      if (!forecastRes.ok) throw new Error("Unable to load NWS hourly forecast");
+
+      const forecastData = await forecastRes.json();
+      return forecastData.properties.periods[0];
+    }
+
+    async function fetchTideSnapshot() {
+      const tideUrl = new URL("https://api.tidesandcurrents.noaa.gov/api/prod/datagetter");
+      tideUrl.search = new URLSearchParams({
+        begin_date: getTodayYYYYMMDD(),
+        range: "48",
+        station: TIDE_STATION,
+        product: "predictions",
+        datum: "MLLW",
+        time_zone: "lst_ldt",
+        interval: "hilo",
+        units: "english",
+        format: "json"
+      }).toString();
+
+      const tideRes = await fetch(tideUrl);
+      if (!tideRes.ok) throw new Error("Unable to load tide data");
+
+      const tideData = await tideRes.json();
+      const predictions = tideData.predictions || [];
+      const upcoming = predictions.filter(tide => new Date(tide.t) > new Date());
+      const nextHigh = upcoming.find(tide => tide.type === "H");
+      const nextLow = upcoming.find(tide => tide.type === "L");
+
+      if (nextHigh && nextLow) return `H: ${formatTime(nextHigh.t)} | L: ${formatTime(nextLow.t)}`;
+      if (nextHigh) return `Next High: ${formatTime(nextHigh.t)}`;
+      if (nextLow) return `Next Low: ${formatTime(nextLow.t)}`;
+      return "Tide data limited";
+    }
+
+    async function fetchMarineSnapshot() {
+      const marineUrl = new URL("https://marine-api.open-meteo.com/v1/marine");
+      marineUrl.search = new URLSearchParams({
+        latitude: OFFSHORE_20MI_LAT,
+        longitude: OFFSHORE_20MI_LON,
+        current: "wave_height,wave_period,swell_wave_height,swell_wave_period",
+        length_unit: "imperial",
+        timezone: "America/New_York",
+        cell_selection: "sea"
+      }).toString();
+
+      const marineRes = await fetch(marineUrl);
+      if (!marineRes.ok) throw new Error("Unable to load marine wave data");
+
+      const marineData = await marineRes.json();
+      const current = marineData.current || {};
+
+      const waveHeight = current.wave_height;
+      const wavePeriod = current.wave_period;
+      const swellHeight = current.swell_wave_height;
+      const swellPeriod = current.swell_wave_period;
+
+      if (waveHeight == null && swellPeriod == null) return "Wave data unavailable";
+
+      const waveText = waveHeight != null
+        ? `${Number(waveHeight).toFixed(1)} ft`
+        : "Wave --";
+
+      const periodText = swellPeriod != null
+        ? `${Math.round(swellPeriod)}s swell`
+        : wavePeriod != null
+          ? `${Math.round(wavePeriod)}s period`
+          : "period --";
+
+      const swellText = swellHeight != null
+        ? ` / ${Number(swellHeight).toFixed(1)} ft swell`
+        : "";
+
+      return `${waveText} @ ${periodText}${swellText}`;
+    }
+
+    async function loadFortPierceLiveData() {
       try {
-        return JSON.parse(localStorage.getItem(storageKey)) || {};
+        const [current, tideText, marineText] = await Promise.all([
+          fetchNwsSnapshot(),
+          fetchTideSnapshot(),
+          fetchMarineSnapshot()
+        ]);
+
+        setText(liveEls.wind, `${current.windDirection} ${current.windSpeed}`);
+        setText(liveEls.seas, marineText);
+        setText(liveEls.tide, tideText);
+        setText(liveEls.storms, current.shortForecast || "No summary available");
       } catch (error) {
-        return {};
+        console.error("Live data error:", error);
+        setText(liveEls.wind, "Unavailable");
+        setText(liveEls.seas, "Unavailable");
+        setText(liveEls.tide, "Unavailable");
+        setText(liveEls.storms, "Unavailable");
       }
     }
 
-    function saveChecklist() {
-      const saved = {};
-      checklist.querySelectorAll('input[type="checkbox"]').forEach(input => {
-        saved[input.dataset.key] = input.checked;
-        input.closest('.check-row').classList.toggle('done', input.checked);
-      });
-      localStorage.setItem(storageKey, JSON.stringify(saved));
-      showToast('Checklist saved');
-    }
-
-    function loadChecklist() {
-      const saved = getSavedChecklist();
-      checklist.querySelectorAll('input[type="checkbox"]').forEach(input => {
-        input.checked = Boolean(saved[input.dataset.key]);
-        input.closest('.check-row').classList.toggle('done', input.checked);
-        input.addEventListener('change', saveChecklist);
-      });
-    }
-
-    loadChecklist();
+    setupMobileMenu();
+    setupResourceFilters();
+    setupConditionTips();
+    loadFortPierceLiveData();
   </script>
 </body>
 </html>
