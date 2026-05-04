@@ -1,83 +1,1009 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Treasure Coast Fishing</title>
-    <link rel="stylesheet" href="./assets/styles.css">
-    <script src="./assets/app.js" defer> </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Treasure Coast Fishing | Offshore Report</title>
+  <style>
+    :root {
+      --bg: #07161d;
+      --bg-soft: #0c2430;
+      --card: rgba(255, 255, 255, 0.09);
+      --card-strong: rgba(255, 255, 255, 0.14);
+      --text: #f4fbff;
+      --muted: rgba(244, 251, 255, 0.72);
+      --muted-2: rgba(244, 251, 255, 0.52);
+      --accent: #34d5c3;
+      --accent-2: #4aa8ff;
+      --warning: #ffd166;
+      --danger: #ff6b6b;
+      --line: rgba(255, 255, 255, 0.14);
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(52, 213, 195, 0.28), transparent 34%),
+        radial-gradient(circle at 85% 0%, rgba(74, 168, 255, 0.24), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(255, 209, 102, 0.12), transparent 38%),
+        linear-gradient(135deg, #061118 0%, #081d27 42%, #0a2b36 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto -15% -35% -15%;
+      height: 45vh;
+      background: rgba(52, 213, 195, 0.09);
+      filter: blur(80px);
+      z-index: -3;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1160px, calc(100% - 34px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(7, 22, 29, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(52, 213, 195, 0.95), rgba(74, 168, 255, 0.9));
+      color: #04242b;
+      box-shadow: 0 15px 40px rgba(52, 213, 195, 0.23);
+    }
+
+    .brand span {
+      display: block;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      line-height: 1.1;
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted-2);
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pill-button,
+    .icon-button {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .pill-button:hover,
+    .icon-button:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.24);
+    }
+
+    .pill-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 11px 15px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .icon-button {
+      width: 44px;
+      height: 44px;
+      display: none;
+      place-items: center;
+      border-radius: 14px;
+      font-size: 1.25rem;
+    }
+
+    .hero {
+      padding: 72px 0 34px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.72fr);
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .panel,
+    .resource-card,
+    .safety-card {
+      position: relative;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .hero-card {
+      min-height: 520px;
+      border-radius: var(--radius);
+      padding: clamp(28px, 5vw, 56px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(7, 22, 29, 0.12), rgba(7, 22, 29, 0.74)),
+        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80") center/cover;
+      opacity: 0.56;
+      z-index: -2;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      right: -90px;
+      bottom: -100px;
+      border-radius: 50%;
+      background: rgba(52, 213, 195, 0.18);
+      filter: blur(20px);
+      z-index: -1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(52, 213, 195, 0.7);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      70% { box-shadow: 0 0 0 12px rgba(52, 213, 195, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(52, 213, 195, 0); }
+    }
+
+    h1 {
+      margin: 22px 0 16px;
+      max-width: 760px;
+      font-size: clamp(3rem, 8vw, 6.8rem);
+      line-height: 0.88;
+      letter-spacing: -0.09em;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.8vw, 1.18rem);
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 18px;
+      text-decoration: none;
+      font-weight: 900;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .cta.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #06212a;
+      box-shadow: 0 18px 44px rgba(52, 213, 195, 0.25);
+    }
+
+    .cta.secondary {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.09);
+      color: var(--text);
+    }
+
+    .cta:hover {
+      transform: translateY(-3px);
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .stat {
+      padding: 17px;
+      border-radius: 21px;
+      background: rgba(0, 0, 0, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.25rem;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted-2);
+      font-size: 0.82rem;
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .panel h2,
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 3vw, 2.25rem);
+      letter-spacing: -0.05em;
+    }
+
+    .panel p,
+    .section-heading p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .condition-list {
+      display: grid;
+      gap: 11px;
+      margin-top: 18px;
+    }
+
+    .condition-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+    }
+
+    .condition-item span {
+      color: var(--muted);
+    }
+
+    .condition-item strong:last-child {
+      color: var(--accent);
+    }
+
+    .mini-note {
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 18px;
+      color: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 209, 102, 0.12);
+      border: 1px solid rgba(255, 209, 102, 0.24);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .section-heading p {
+      max-width: 570px;
+      margin: 8px 0 0;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 10px 13px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: 180ms ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      color: #06212a;
+      border-color: transparent;
+      background: var(--accent);
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .resource-card {
+      min-height: 250px;
+      border-radius: 26px;
+      padding: 23px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-7px);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.08));
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .resource-card .icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: rgba(52, 213, 195, 0.14);
+      border: 1px solid rgba(52, 213, 195, 0.22);
+      font-size: 1.65rem;
+    }
+
+    .resource-card h3 {
+      margin: 20px 0 8px;
+      font-size: 1.35rem;
+      letter-spacing: -0.04em;
+    }
+
+    .resource-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tag {
+      color: var(--muted-2);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .open-link {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      text-decoration: none;
+      transition: 180ms ease;
+    }
+
+    .resource-card:hover .open-link {
+      background: var(--accent);
+      color: #06212a;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 18px;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border-radius: 17px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .check-row input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+
+    .check-row.done span {
+      color: var(--muted-2);
+      text-decoration: line-through;
+    }
+
+    .forecast-box {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .forecast-day {
+      padding: 18px 14px;
+      border-radius: 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .forecast-day strong {
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .forecast-day span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .safety-card {
+      border-radius: var(--radius);
+      padding: clamp(24px, 4vw, 38px);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 20px;
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.16), rgba(255, 255, 255, 0.07));
+    }
+
+    .safety-icon {
+      width: 66px;
+      height: 66px;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      color: #2d2200;
+      background: var(--warning);
+      font-size: 1.8rem;
+    }
+
+    .safety-card h2 {
+      margin: 0 0 6px;
+      letter-spacing: -0.04em;
+    }
+
+    .safety-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    footer {
+      padding: 40px 0 54px;
+      color: var(--muted-2);
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translate(-50%, 120px);
+      padding: 13px 17px;
+      border-radius: 999px;
+      background: rgba(4, 18, 24, 0.9);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      color: var(--text);
+      z-index: 30;
+      transition: transform 240ms ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid,
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .resource-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .section-heading {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero {
+        padding-top: 34px;
+      }
+
+      .hero-card {
+        min-height: auto;
+      }
+
+      .nav-actions .pill-button {
+        display: none;
+      }
+
+      .icon-button {
+        display: grid;
+      }
+
+      .mobile-menu {
+        display: none;
+        padding-bottom: 16px;
+      }
+
+      .mobile-menu.open {
+        display: grid;
+        gap: 10px;
+      }
+
+      .mobile-menu a {
+        padding: 13px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--line);
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      .quick-stats,
+      .forecast-box,
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .safety-card {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-          <span class="fs-4">Treasure Coast Fishing / Offshore Report</span>
+  <header class="topbar">
+    <div class="shell">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="#top" aria-label="Treasure Coast Fishing home">
+          <div class="logo" aria-hidden="true">🌊</div>
+          <div>
+            <span>Treasure Coast Fishing</span>
+            <small>Offshore Report</small>
+          </div>
         </a>
-    </header
-        
-      >
-    
 
-<section>
+        <div class="nav-actions">
+          <a class="pill-button" href="#resources">Resources</a>
+          <a class="pill-button" href="https://forecast.weather.gov/shmrn.php?mz=amz555" target="_blank" rel="noopener">NOAA Report ↗</a>
+          <button class="icon-button" id="menuToggle" aria-label="Open menu">☰</button>
+        </div>
+      </nav>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="#resources">Resources</a>
+        <a href="#trip-tools">Trip Tools</a>
+        <a href="https://forecast.weather.gov/shmrn.php?mz=amz555" target="_blank" rel="noopener">NOAA Report ↗</a>
+      </div>
+    </div>
+  </header>
 
-    <div class="main-menu" >
-    <div class="dropdown-menu position-static d-flex flex-column flex-lg-row align-items-stretch justify-content-start p-3 rounded-3 shadow-lg" data-bs-theme="dark">
-        <nav class="col-lg-8">
-          <ul class="list-unstyled d-flex flex-column gap-2">
-            <li>
-              <a href="#" class="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-2 px-3 lh-sm text-start">
-                <svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
-                <div>
-                  <strong class="d-block">Live Inlet Cams</strong>
-                  <small>Check Out Live Conditions Using Links-> </small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-2 px-3 lh-sm text-start">
-                <svg class="bi" width="24" height="24"><use xlink:href="#music-note-beamed"></use></svg>
-                <div>
-                  <strong class="d-block">NOAA Forecast -></strong>
-                  <small>See NOAA Details On Wave Heights/Orientation</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-2 px-3 lh-sm text-start">
-                <svg class="bi" width="24" height="24"><use xlink:href="#question-circle"></use></svg>
-                <div>
-                  <strong class="d-block">More Coming Soon!</strong>
-                  <small>Stay Up To Date / Stay Safe - This site is for information purposes only, do not rely on this information. Make decisions based on your own research. Be smart.</small>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <div class="d-none d-lg-block vr mx-4 opacity-10">&nbsp;</div>
-        <hr class="d-lg-none">
-        <div class="col-lg-auto pe-3">
-          <nav>
-            <ul class="d-flex flex-column gap-2 list-unstyled small">
-              <li><a href="https://video-monitoring.com/beachcams/jupiter/" class="link-offset-2 link-underline link-underline-opacity-25 link-underline-opacity-75-hover">Jupiter Cam</a></li>
-              <li><a href="https://visitstlucie.com/fort-pierce-inlet-webcam-and-jetty/" class="link-offset-2 link-underline link-underline-opacity-25 link-underline-opacity-75-hover">Fort Pierce Cam</a></li>
-              <li><a href="https://www.earthcam.com/usa/florida/hillsboro/?cam=hillsboro" class="link-offset-2 link-underline link-underline-opacity-25 link-underline-opacity-75-hover">Hillsboro Cam</a></li>
-              <li><a href="https://forecast.weather.gov/shmrn.php?mz=amz555" class="link-offset-2 link-underline link-underline-opacity-25 link-underline-opacity-75-hover">NOAA Report</a></li>
-              <li><a href="https://weather.com/weather/tenday/l/Stuart+FL?canonicalCityId=1653d805a54c360d69565a51537b80e38444955ef88fad6d5c2d0e9633b3914e" class="link-offset-2 link-underline link-underline-opacity-25 link-underline-opacity-75-hover">Stuart FL Weather</a></li>
-              <li><a href="https://www.buoyweather.com/#8.17/27.19/-80.11/SWELL" class="link-offset-2 link-underline link-underline-opacity-25 link-underline-opacity-75-hover">BouyWeather</a></li>
-            </ul>
-          </nav>
+  <main id="top">
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div class="hero-card">
+          <div>
+            <div class="eyebrow"><span class="pulse"></span> Check conditions before you go</div>
+            <h1>Plan smarter offshore days.</h1>
+            <p class="hero-copy">
+              A simple hub for Treasure Coast anglers to jump into inlet cams, marine forecasts,
+              local weather, and swell resources before heading out.
+            </p>
+            <div class="hero-actions">
+              <a class="cta primary" href="#resources">View fishing resources →</a>
+              <a class="cta secondary" href="https://video-monitoring.com/beachcams/jupiter/" target="_blank" rel="noopener">Open Jupiter Cam</a>
+            </div>
+          </div>
+
+          <div class="quick-stats" aria-label="Quick reminders">
+            <div class="stat">
+              <strong>3</strong>
+              <span>Inlet cams</span>
+            </div>
+            <div class="stat">
+              <strong>NOAA</strong>
+              <span>Marine forecast</span>
+            </div>
+            <div class="stat">
+              <strong>Local</strong>
+              <span>Weather links</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="side-stack">
+          <div class="panel">
+            <h2>Pre-trip scan</h2>
+            <p>Use this quick rhythm before deciding whether conditions are worth the run.</p>
+            <div class="condition-list">
+              <div class="condition-item" data-note="Open the closest live inlet cam and look for chop, current, boat traffic, and breaking waves.">
+                <span>Step 01</span><strong>Watch inlet cams</strong>
+              </div>
+              <div class="condition-item" data-note="Check NOAA first for marine forecast details like seas, wind, advisories, and timing.">
+                <span>Step 02</span><strong>Review NOAA</strong>
+              </div>
+              <div class="condition-item" data-note="Compare swell direction, period, wind direction, tide, storms, and your own comfort level.">
+                <span>Step 03</span><strong>Cross-check sources</strong>
+              </div>
+            </div>
+            <div class="mini-note" id="tipBox">Tap a pre-trip item for a quick reminder.</div>
+          </div>
+
+          <div class="panel">
+            <h2>Safety first</h2>
+            <p>This site is for informational convenience only. Always make your own go/no-go decision using official forecasts, current conditions, your boat, and your experience.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="resources">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <h2>Fishing condition resources</h2>
+            <p>Filter by resource type and open the links you need fast.</p>
+          </div>
+          <div class="filters" aria-label="Resource filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="cams">Cams</button>
+            <button class="filter-btn" data-filter="forecast">Forecast</button>
+            <button class="filter-btn" data-filter="weather">Weather</button>
+          </div>
+        </div>
+
+        <div class="resource-grid" id="resourceGrid">
+          <article class="resource-card" data-category="cams">
+            <div>
+              <div class="icon">📹</div>
+              <h3>Jupiter Inlet Cam</h3>
+              <p>Check live beach and inlet conditions near Jupiter before heading offshore.</p>
+            </div>
+            <div class="card-footer">
+              <span class="tag">Live cam</span>
+              <a class="open-link" href="https://video-monitoring.com/beachcams/jupiter/" target="_blank" rel="noopener" aria-label="Open Jupiter Inlet Cam">↗</a>
+            </div>
+          </article>
+
+          <article class="resource-card" data-category="cams">
+            <div>
+              <div class="icon">🌴</div>
+              <h3>Fort Pierce Inlet Cam</h3>
+              <p>View Fort Pierce inlet and jetty conditions from a local Treasure Coast source.</p>
+            </div>
+            <div class="card-footer">
+              <span class="tag">Live cam</span>
+              <a class="open-link" href="https://visitstlucie.com/fort-pierce-inlet-webcam-and-jetty/" target="_blank" rel="noopener" aria-label="Open Fort Pierce Inlet Cam">↗</a>
+            </div>
+          </article>
+
+          <article class="resource-card" data-category="cams">
+            <div>
+              <div class="icon">☀️</div>
+              <h3>Hillsboro Cam</h3>
+              <p>Use this southern reference point to compare visible beach and water conditions.</p>
+            </div>
+            <div class="card-footer">
+              <span class="tag">Live cam</span>
+              <a class="open-link" href="https://www.earthcam.com/usa/florida/hillsboro/?cam=hillsboro" target="_blank" rel="noopener" aria-label="Open Hillsboro Cam">↗</a>
+            </div>
+          </article>
+
+          <article class="resource-card" data-category="forecast">
+            <div>
+              <div class="icon">🌊</div>
+              <h3>NOAA Marine Forecast</h3>
+              <p>Official marine forecast for wave heights, wind, seas, and advisories.</p>
+            </div>
+            <div class="card-footer">
+              <span class="tag">Official forecast</span>
+              <a class="open-link" href="https://forecast.weather.gov/shmrn.php?mz=amz555" target="_blank" rel="noopener" aria-label="Open NOAA Marine Forecast">↗</a>
+            </div>
+          </article>
+
+          <article class="resource-card" data-category="weather">
+            <div>
+              <div class="icon">⛅</div>
+              <h3>Stuart FL Weather</h3>
+              <p>Quick look at local weather trends, storms, wind, and the 10-day outlook.</p>
+            </div>
+            <div class="card-footer">
+              <span class="tag">Local weather</span>
+              <a class="open-link" href="https://weather.com/weather/tenday/l/Stuart+FL?canonicalCityId=1653d805a54c360d69565a51537b80e38444955ef88fad6d5c2d0e9633b3914e" target="_blank" rel="noopener" aria-label="Open Stuart Florida Weather">↗</a>
+            </div>
+          </article>
+
+          <article class="resource-card" data-category="forecast">
+            <div>
+              <div class="icon">🧭</div>
+              <h3>BuoyWeather</h3>
+              <p>Compare swell, wind, and offshore conditions using a broader marine map view.</p>
+            </div>
+            <div class="card-footer">
+              <span class="tag">Swell map</span>
+              <a class="open-link" href="https://www.buoyweather.com/#8.17/27.19/-80.11/SWELL" target="_blank" rel="noopener" aria-label="Open BuoyWeather">↗</a>
+            </div>
+          </article>
         </div>
       </div>
-</div>
+    </section>
 
+    <section class="section" id="trip-tools">
+      <div class="shell tools-grid">
+        <div class="panel">
+          <h2>Trip checklist</h2>
+          <p>Tap each item as you review your plan. This checklist saves on this device.</p>
+          <div class="checklist" id="checklist">
+            <label class="check-row"><input type="checkbox" data-key="noaa"> <span>Checked NOAA marine forecast</span></label>
+            <label class="check-row"><input type="checkbox" data-key="cams"> <span>Reviewed inlet cams</span></label>
+            <label class="check-row"><input type="checkbox" data-key="weather"> <span>Checked storms and local weather</span></label>
+            <label class="check-row"><input type="checkbox" data-key="floatplan"> <span>Told someone your float plan</span></label>
+            <label class="check-row"><input type="checkbox" data-key="safety"> <span>Confirmed safety gear and fuel</span></label>
+          </div>
+        </div>
 
+        <div class="panel">
+          <h2>Simple condition mindset</h2>
+          <p>Use this as a placeholder section for future live data, favorite spots, tide links, or a fishing report.</p>
+          <div class="forecast-box">
+            <div class="forecast-day"><strong>Wind</strong><span>Direction + speed</span></div>
+            <div class="forecast-day"><strong>Seas</strong><span>Height + period</span></div>
+            <div class="forecast-day"><strong>Tide</strong><span>Inlet timing</span></div>
+            <div class="forecast-day"><strong>Storms</strong><span>Radar check</span></div>
+          </div>
+          <div class="mini-note">
+            Want to expand this later? Add tide charts, moon phase, reef numbers, target species, or an actual daily offshore report feed.
+          </div>
+        </div>
+      </div>
+    </section>
 
-</section>
+    <section class="section">
+      <div class="shell">
+        <div class="safety-card">
+          <div class="safety-icon">⚠️</div>
+          <div>
+            <h2>Make your own call.</h2>
+            <p>Stay up to date and stay safe. This site is for information purposes only. Do not rely solely on this page. Use official sources, current observations, and your own judgment.</p>
+          </div>
+          <a class="cta secondary" href="https://forecast.weather.gov/shmrn.php?mz=amz555" target="_blank" rel="noopener">Open NOAA</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
+  <footer>
+    <div class="shell">
+      Treasure Coast Fishing / Offshore Report · Built as a single-file HTML site
+    </div>
+  </footer>
 
-    
+  <div class="toast" id="toast" role="status" aria-live="polite">Checklist saved</div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const resourceCards = document.querySelectorAll('.resource-card');
+    const tipBox = document.getElementById('tipBox');
+    const conditionItems = document.querySelectorAll('.condition-item');
+    const checklist = document.getElementById('checklist');
+    const toast = document.getElementById('toast');
+
+    const storageKey = 'treasureCoastFishingChecklist';
+    let toastTimer;
+
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      menuToggle.textContent = mobileMenu.classList.contains('open') ? '×' : '☰';
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        menuToggle.textContent = '☰';
+      });
+    });
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        resourceCards.forEach(card => {
+          const shouldShow = filter === 'all' || card.dataset.category === filter;
+          card.style.display = shouldShow ? 'flex' : 'none';
+        });
+      });
+    });
+
+    conditionItems.forEach(item => {
+      item.addEventListener('click', () => {
+        tipBox.textContent = item.dataset.note;
+        conditionItems.forEach(row => row.style.borderColor = 'rgba(255,255,255,0.1)');
+        item.style.borderColor = 'rgba(52, 213, 195, 0.65)';
+      });
+    });
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
+    }
+
+    function getSavedChecklist() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey)) || {};
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function saveChecklist() {
+      const saved = {};
+      checklist.querySelectorAll('input[type="checkbox"]').forEach(input => {
+        saved[input.dataset.key] = input.checked;
+        input.closest('.check-row').classList.toggle('done', input.checked);
+      });
+      localStorage.setItem(storageKey, JSON.stringify(saved));
+      showToast('Checklist saved');
+    }
+
+    function loadChecklist() {
+      const saved = getSavedChecklist();
+      checklist.querySelectorAll('input[type="checkbox"]').forEach(input => {
+        input.checked = Boolean(saved[input.dataset.key]);
+        input.closest('.check-row').classList.toggle('done', input.checked);
+        input.addEventListener('change', saveChecklist);
+      });
+    }
+
+    loadChecklist();
+  </script>
 </body>
 </html>
